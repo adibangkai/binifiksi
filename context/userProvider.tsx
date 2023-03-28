@@ -1,34 +1,48 @@
 "use client";
-
-"use client";
 import { resolve } from "path";
-import { createContext, useState } from "react";
+import { createContext, Dispatch, SetStateAction, useState } from "react";
 
 export interface IUser {
-  name: string;
-  photo: string;
+  name?: string;
+  umur?: string;
+  karakter?: string;
+  order?: string;
+  suku?: string;
+  photo?: string;
 }
 
-export interface UserType {
-  user: IUser;
-}
+export const UserContext = createContext<
+  [IUser | null, (user: IUser | null) => void]
+>([
+  {
+    name: "Revalina",
+    umur: "23",
+    karakter: "penyabar, penyayang, sedikit keras kepala, agak pelit",
+    order: "anak ke-4 dari 5 bersaudara",
+    suku: "minang",
+    photo:
+      "https://www.mncpictures.com/webcms/public/assets/images/videos/cast-1670215717.png",
+  },
+  () => {},
+]);
 
-const defaultUser: IUser = {
+const defaultUser = {
   name: "Revalina",
+  umur: "23",
+  karakter: "penyabar, penyayang, sedikit keras kepala, agak pelit",
+  order: "anak ke-4 dari 5 bersaudara",
+  suku: "minang",
   photo:
     "https://www.mncpictures.com/webcms/public/assets/images/videos/cast-1670215717.png",
 };
-
-export const UserContext = createContext<UserType>({
-  user: defaultUser,
-});
 
 export default function UserProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [currentUser, setCurrentUser] = useState<UserType>(defaultUser);
+  const user = JSON.parse(localStorage.getItem("userBiniFiksi")) || defaultUser;
+  const currentUser = useState(user as IUser | null);
   return (
     <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>
   );
